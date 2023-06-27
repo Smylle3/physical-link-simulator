@@ -1,36 +1,7 @@
 #include <iostream>
-#include <string>
+#include "CamadaFisica.hpp"
 
 using namespace std;
-
-void AplicacaoTransmissora();
-void CamadaDeAplicacaoTransmissora(string mensagem);
-void CamadaFisicaTransmissora(int quadro[]);
-void MeioDeComunicacao(int fluxoBrutoDeBits[]);
-void CamadaFisicaReceptora(int quadro[]);
-void CamadaDeAplicacaoReceptora(int quadro[]);
-void AplicacaoReceptora(string mensagem);
-int *CamadaFisicaTransmissoraCodificacaoBinaria(int quadro[]);
-int *CamadaFisicaTransmissoraCodificacaoManchester(int quadro[]);
-int *CamadaFisicaTransmissoraCodificacaoBipolar(int quadro[]);
-int *CamadaFisicaReceptoraCodificacaoBinaria(int quadro[]);
-int *CamadaFisicaReceptoraCodificacaoManchester(int quadro[]);
-int *CamadaFisicaReceptoraCodificacaoBipolar(int quadro[]);
-
-int main()
-{
-    AplicacaoTransmissora();
-    return 0;
-}
-
-void AplicacaoTransmissora()
-{
-    string mensagem;
-    cout << "Digite uma Mensagem: " << endl;
-    cin >> mensagem;
-
-    CamadaDeAplicacaoTransmissora(mensagem);
-}
 
 void CamadaDeAplicacaoTransmissora(string mensagem)
 {
