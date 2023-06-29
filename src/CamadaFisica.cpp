@@ -35,7 +35,7 @@ vector<int> ConversorParaBits(string mensagem)
     return quadro;
 }
 
-string ConversorParaString(const vector<int> &quadro)
+string ConversorParaString(vector<int> quadro)
 {
     string mensagem;
     int valor = 0;
