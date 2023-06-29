@@ -124,7 +124,7 @@ vector<int> CamadaFisicaTransmissoraCodificacaoBinaria(vector<int> quadro)
 vector<int> CamadaFisicaTransmissoraCodificacaoManchester(vector<int> quadro)
 {
     cout << "Camada Fisica Transmissora - Mensagem em codificacao Manchester: " << endl;
-    // Implemente a codificação Manchester e retorne o fluxo bruto de bits como um ponteiro
+
     vector<int> fluxoBrutoDeBits;
 
     for (int i = 0; i < quadro.size(); i++)
@@ -149,10 +149,26 @@ vector<int> CamadaFisicaTransmissoraCodificacaoManchester(vector<int> quadro)
 
 vector<int> CamadaFisicaTransmissoraCodificacaoBipolar(vector<int> quadro)
 {
-    cout << "Codificação Bipolar" << endl;
-    // Implemente a codificação bipolar e retorne o fluxo bruto de bits como um ponteiro
-    vector<int> fluxoBrutoDeBits; // Exemplo: inicialize o ponteiro como nulo
-    // Faça as operações necessárias para codificar o quadro e atribuir o resultado a 'fluxoBrutoDeBits'
+    cout << "Camada Fisica Transmissora - Mensagem em codificacao Bipolar: " << endl;
+
+    vector<int> fluxoBrutoDeBits;
+
+    int polaridade = 1; // Polaridade inicial
+
+    for (int i = 0; i < quadro.size(); i++)
+    {
+        if (quadro[i] == 0)
+        {
+            fluxoBrutoDeBits.push_back(0); // Bit 0 é representado por 0
+        }
+        else
+        {
+            fluxoBrutoDeBits.push_back(polaridade); // Bit 1 é representado pela polaridade atual
+            polaridade *= -1;                 // Inverte a polaridade para o próximo bit
+        }
+    }
+
+    ImprimeBits(fluxoBrutoDeBits);
     return fluxoBrutoDeBits;
 }
 
@@ -241,10 +257,22 @@ vector<int> CamadaFisicaReceptoraCodificacaoManchester(vector<int> quadro)
 
 vector<int> CamadaFisicaReceptoraCodificacaoBipolar(vector<int> quadro)
 {
-    cout << "Implementar Decodificação Bipolar" << endl;
-    // Implemente a decodificação bipolar e retorne o fluxo bruto de bits como um ponteiro
-    vector<int> fluxoBrutoDeBits; // Exemplo: inicialize o ponteiro como nulo
-    // Faça as operações necessárias para decodificar o quadro e atribuir o resultado a 'fluxoBrutoDeBits'
+    vector<int> fluxoBrutoDeBits;
+
+    cout << "Camada Fisica Receptora - Mensagem em codificacao Manchester: " << endl;
+    
+    int polaridade = 1;  // Polaridade inicial
+
+    for (int i = 0; i < quadro.size(); i++) {
+        if (quadro[i] == 0) {
+            fluxoBrutoDeBits.push_back(0);  // Bit 0
+        } else {
+            fluxoBrutoDeBits.push_back(1);  // Bit 1
+            polaridade *= -1;  // Inverte a polaridade para o próximo bit
+        }
+    }
+
+    ImprimeBits(fluxoBrutoDeBits);
     return fluxoBrutoDeBits;
 }
 
