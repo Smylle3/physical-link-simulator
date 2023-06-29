@@ -18,56 +18,38 @@ void ImprimeBits(vector<int> bits)
 
 vector<int> ConversorParaBits(string mensagem)
 {
-    int i = 0, j = 0;
     vector<int> quadro;
 
-    for (i = 0; i < mensagem.size(); i++)
+    for (char c : mensagem)
     {
-        bitset<8> set(mensagem[i]);
-        if (mensagem[i] == ' ')
-        {
-            // um espaço vazio teve que virar um caso especial
-            set.reset();   // todos são zero
-            set.set(5, 1); // 32 == espaço
-        }
+        // Conversão direta de cada caractere para o valor binário correspondente
+        bitset<8> bits(c);
 
-        for (j = 7; j >= 0; j--)
+        // Inserir os bits no quadro
+        for (int i = 7; i >= 0; i--)
         {
-            if (set.test(j))
-            {
-                quadro.push_back(1);
-            }
-            else
-            {
-                quadro.push_back(0);
-            }
+            quadro.push_back(bits[i]);
         }
     }
 
     return quadro;
 }
 
-string ConversorParaString(vector<int> quadro)
+string ConversorParaString(const vector<int> &quadro)
 {
-    int i = 0, y = 0, j = 0;
     string mensagem;
-    int letra = 0;
-    // Pega grupo de 8 bits
-    for (i = 0; i < quadro.size(); i += 8)
-    {
-        letra = 0;
-        y = 0;
-        // Ler os 8 bits e converte de binario para decimal utilizando base 2
-        // e o expoente da potencia sendo o indice do bit
-        for (j = i; j < (8 + i); j++)
-        {
-            if (quadro[j] == 1)
-                letra = letra + pow(2, 7 - y);
+    int valor = 0;
 
-            y++;
+    for (size_t i = 0; i < quadro.size(); i += 8)
+    {
+        valor = 0;
+
+        for (size_t j = 0; j < 8; j++)
+        {
+            valor = (valor << 1) + quadro[i + j];
         }
-        // Converte o valor inteiro em um caracter e concatena com a string que sera retornada
-        mensagem.push_back((char)letra);
+
+        mensagem.push_back(static_cast<char>(valor));
     }
 
     return mensagem;
