@@ -3,6 +3,19 @@
 
 using namespace std;
 
+int opcao = 0;
+
+void ImprimeBits(vector<int> bits)
+{
+    for (int i = 0; i < bits.size(); i++)
+    {
+        cout << bits[i];
+    }
+
+    cout << endl
+         << endl;
+}
+
 vector<int> ConversorParaBits(string mensagem)
 {
     int i = 0, j = 0;
@@ -66,20 +79,18 @@ void CamadaDeAplicacaoTransmissora(string mensagem)
 
     cout << "Camada De Aplicacao Transmissora | Mensagem convertida para bits:" << endl;
 
-    for (int i = 0; i < quadro.size(); i++)
-    {
-        cout << quadro[i];
-    }
-    cout << endl
-         << endl;
-
+    ImprimeBits(quadro);
     CamadaFisicaTransmissora(quadro);
 }
 
 void CamadaFisicaTransmissora(vector<int> quadro)
 {
-    int tipoDeCodificacao = 0;    // Mudar de acordo com o teste
-    vector<int> fluxoBrutoDeBits; // Trabalhar com BITS
+    cout << "Escolha uma opcao (0, 1 ou 2): ";
+    cin >> opcao;
+    cout << endl;
+
+    int tipoDeCodificacao = opcao; // Mudar de acordo com o teste
+    vector<int> fluxoBrutoDeBits;  // Trabalhar com BITS
 
     switch (tipoDeCodificacao)
     {
@@ -104,24 +115,35 @@ vector<int> CamadaFisicaTransmissoraCodificacaoBinaria(vector<int> quadro)
 {
     cout << "Camada Fisica Transmissora - Mensagem em codificacao Binaria: " << endl;
     // Implemente a codificação binária e retorne o fluxo bruto de bits como um ponteiro
-    vector<int> fluxoBrutoDeBits = quadro; // Exemplo: inicialize o ponteiro como nulo
+    vector<int> fluxoBrutoDeBits = quadro;
 
-    for (int i = 0; i < fluxoBrutoDeBits.size(); i++)
-    {
-        cout << fluxoBrutoDeBits[i];
-    }
-
-    cout << endl
-         << endl;
+    ImprimeBits(fluxoBrutoDeBits);
     return fluxoBrutoDeBits;
 }
 
 vector<int> CamadaFisicaTransmissoraCodificacaoManchester(vector<int> quadro)
 {
-    cout << "Codificação Manchester" << endl;
+    cout << "Camada Fisica Transmissora - Mensagem em codificacao Manchester: " << endl;
     // Implemente a codificação Manchester e retorne o fluxo bruto de bits como um ponteiro
-    vector<int> fluxoBrutoDeBits; // Exemplo: inicialize o ponteiro como nulo
-    // Faça as operações necessárias para codificar o quadro e atribuir o resultado a 'fluxoBrutoDeBits'
+    vector<int> fluxoBrutoDeBits;
+
+    for (int i = 0; i < quadro.size(); i++)
+    {
+        if (quadro[i] == 0)
+        {
+            // Bit 0: transição de alto para baixo no meio do intervalo
+            fluxoBrutoDeBits.push_back(1);
+            fluxoBrutoDeBits.push_back(0);
+        }
+        else if (quadro[i] == 1)
+        {
+            // Bit 1: transição de baixo para alto no meio do intervalo
+            fluxoBrutoDeBits.push_back(0);
+            fluxoBrutoDeBits.push_back(1);
+        }
+    }
+
+    ImprimeBits(fluxoBrutoDeBits);
     return fluxoBrutoDeBits;
 }
 
@@ -155,8 +177,8 @@ void MeioDeComunicacao(vector<int> fluxoBrutoDeBits) // Metodo que simula a tran
 
 void CamadaFisicaReceptora(vector<int> quadro)
 {
-    int tipoDeDecodificacao = 0;  // Alterar de acordo com o teste
-    vector<int> fluxoBrutoDeBits; // TRABALHAR COM BITS
+    int tipoDeDecodificacao = opcao; // Alterar de acordo com o teste
+    vector<int> fluxoBrutoDeBits;    // TRABALHAR COM BITS
 
     switch (tipoDeDecodificacao)
     {
@@ -183,22 +205,37 @@ vector<int> CamadaFisicaReceptoraCodificacaoBinaria(vector<int> quadro)
 
     cout << "Camada Fisica Receptora - Mensagem em codificacao Binaria: " << endl;
 
-    for (int i = 0; i < fluxoBrutoDeBits.size(); i++)
-    {
-        cout << fluxoBrutoDeBits[i];
-    }
-    cout << endl
-         << endl;
+    ImprimeBits(fluxoBrutoDeBits);
 
     return fluxoBrutoDeBits;
 }
 
 vector<int> CamadaFisicaReceptoraCodificacaoManchester(vector<int> quadro)
 {
-    cout << "Implementar Decodificação Manchester" << endl;
-    // Implemente a decodificação Manchester e retorne o fluxo bruto de bits como um ponteiro
-    vector<int> fluxoBrutoDeBits; // Exemplo: inicialize o ponteiro como nulo
-    // Faça as operações necessárias para decodificar o quadro e atribuir o resultado a 'fluxoBrutoDeBits'
+    vector<int> fluxoBrutoDeBits;
+
+    cout << "Camada Fisica Receptora - Mensagem em codificacao Manchester: " << endl;
+
+    for (int i = 0; i < quadro.size(); i += 2)
+    {
+        if (quadro[i] == 1 && quadro[i + 1] == 0)
+        {
+            // Transição de alto para baixo: bit 0
+            fluxoBrutoDeBits.push_back(0);
+        }
+        else if (quadro[i] == 0 && quadro[i + 1] == 1)
+        {
+            // Transição de baixo para alto: bit 1
+            fluxoBrutoDeBits.push_back(1);
+        }
+        else
+        {
+            cout << "*ERRO NA DECODIFICACAO*" << endl;
+        }
+    }
+
+    ImprimeBits(fluxoBrutoDeBits);
+
     return fluxoBrutoDeBits;
 }
 
