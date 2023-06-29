@@ -17,6 +17,7 @@ void AplicacaoTransmissora()
     string mensagem;
     cout << "Digite uma Mensagem: " << endl;
     cin >> mensagem;
+    cout << endl;
 
     CamadaDeAplicacaoTransmissora(mensagem);
 }

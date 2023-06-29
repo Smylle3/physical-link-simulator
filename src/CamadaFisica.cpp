@@ -3,20 +3,83 @@
 
 using namespace std;
 
+vector<int> ConversorParaBits(string mensagem)
+{
+    int i = 0, j = 0;
+    vector<int> quadro;
+
+    for (i = 0; i < mensagem.size(); i++)
+    {
+        bitset<8> set(mensagem[i]);
+        if (mensagem[i] == ' ')
+        {
+            // um espaço vazio teve que virar um caso especial
+            set.reset();   // todos são zero
+            set.set(5, 1); // 32 == espaço
+        }
+
+        for (j = 7; j >= 0; j--)
+        {
+            if (set.test(j))
+            {
+                quadro.push_back(1);
+            }
+            else
+            {
+                quadro.push_back(0);
+            }
+        }
+    }
+
+    return quadro;
+}
+
+string ConversorParaString(vector<int> quadro)
+{
+    int i = 0, y = 0, j = 0;
+    string mensagem;
+    int letra = 0;
+    // Pega grupo de 8 bits
+    for (i = 0; i < quadro.size(); i += 8)
+    {
+        letra = 0;
+        y = 0;
+        // Ler os 8 bits e converte de binario para decimal utilizando base 2
+        // e o expoente da potencia sendo o indice do bit
+        for (j = i; j < (8 + i); j++)
+        {
+            if (quadro[j] == 1)
+                letra = letra + pow(2, 7 - y);
+
+            y++;
+        }
+        // Converte o valor inteiro em um caracter e concatena com a string que sera retornada
+        mensagem.push_back((char)letra);
+    }
+
+    return mensagem;
+}
+
 void CamadaDeAplicacaoTransmissora(string mensagem)
 {
-    int quadro[mensagem.length()];
-    for (int i = 0; i < mensagem.length(); i++)
+    vector<int> quadro = ConversorParaBits(mensagem);
+
+    cout << "Camada De Aplicacao Transmissora | Mensagem convertida para bits:" << endl;
+
+    for (int i = 0; i < quadro.size(); i++)
     {
-        quadro[i] = mensagem[i];
+        cout << quadro[i];
     }
+    cout << endl
+         << endl;
+
     CamadaFisicaTransmissora(quadro);
 }
 
-void CamadaFisicaTransmissora(int quadro[])
+void CamadaFisicaTransmissora(vector<int> quadro)
 {
-    int tipoDeCodificacao = 0; // Mudar de acordo com o teste
-    int *fluxoBrutoDeBits;     // Trabalhar com BITS
+    int tipoDeCodificacao = 0;    // Mudar de acordo com o teste
+    vector<int> fluxoBrutoDeBits; // Trabalhar com BITS
 
     switch (tipoDeCodificacao)
     {
@@ -37,57 +100,63 @@ void CamadaFisicaTransmissora(int quadro[])
     MeioDeComunicacao(fluxoBrutoDeBits);
 } // fim do método CamadaFisicaTransmissora
 
-int *CamadaFisicaTransmissoraCodificacaoBinaria(int quadro[])
+vector<int> CamadaFisicaTransmissoraCodificacaoBinaria(vector<int> quadro)
 {
-    cout << "Codificação Binária" << endl;
+    cout << "Camada Fisica Transmissora - Mensagem em codificacao Binaria: " << endl;
     // Implemente a codificação binária e retorne o fluxo bruto de bits como um ponteiro
-    int *fluxoBrutoDeBits = nullptr; // Exemplo: inicialize o ponteiro como nulo
-    // Faça as operações necessárias para codificar o quadro e atribuir o resultado a 'fluxoBrutoDeBits'
+    vector<int> fluxoBrutoDeBits = quadro; // Exemplo: inicialize o ponteiro como nulo
+
+    for (int i = 0; i < fluxoBrutoDeBits.size(); i++)
+    {
+        cout << fluxoBrutoDeBits[i];
+    }
+
+    cout << endl
+         << endl;
     return fluxoBrutoDeBits;
 }
 
-int *CamadaFisicaTransmissoraCodificacaoManchester(int quadro[])
+vector<int> CamadaFisicaTransmissoraCodificacaoManchester(vector<int> quadro)
 {
     cout << "Codificação Manchester" << endl;
     // Implemente a codificação Manchester e retorne o fluxo bruto de bits como um ponteiro
-    int *fluxoBrutoDeBits = nullptr; // Exemplo: inicialize o ponteiro como nulo
+    vector<int> fluxoBrutoDeBits; // Exemplo: inicialize o ponteiro como nulo
     // Faça as operações necessárias para codificar o quadro e atribuir o resultado a 'fluxoBrutoDeBits'
     return fluxoBrutoDeBits;
 }
 
-int *CamadaFisicaTransmissoraCodificacaoBipolar(int quadro[])
+vector<int> CamadaFisicaTransmissoraCodificacaoBipolar(vector<int> quadro)
 {
     cout << "Codificação Bipolar" << endl;
     // Implemente a codificação bipolar e retorne o fluxo bruto de bits como um ponteiro
-    int *fluxoBrutoDeBits = nullptr; // Exemplo: inicialize o ponteiro como nulo
+    vector<int> fluxoBrutoDeBits; // Exemplo: inicialize o ponteiro como nulo
     // Faça as operações necessárias para codificar o quadro e atribuir o resultado a 'fluxoBrutoDeBits'
     return fluxoBrutoDeBits;
 }
 
-void MeioDeComunicacao(int fluxoBrutoDeBits[]) // Metodo que simula a transmissão de informações de um pontoA para um pontoB
+void MeioDeComunicacao(vector<int> fluxoBrutoDeBits) // Metodo que simula a transmissão de informações de um pontoA para um pontoB
 {
-    int *fluxoBrutoDeBitsPontoA, *fluxoBrutoDeBitsPontoB;
+    vector<int> fluxoBrutoDeBitsPontoA, fluxoBrutoDeBitsPontoB;
 
     fluxoBrutoDeBitsPontoA = fluxoBrutoDeBits;
 
-    int tamanho = sizeof(fluxoBrutoDeBits) / sizeof(fluxoBrutoDeBits[0]); // Obter o tamanho do array
+    int tamanho = fluxoBrutoDeBitsPontoA.size();
 
-    fluxoBrutoDeBitsPontoB = new int[tamanho]; // Alocar memória para o array fluxoBrutoDeBitsPontoB
+    // fluxoBrutoDeBitsPontoB = new int[tamanho]; // Alocar memória para o array fluxoBrutoDeBitsPontoB
 
     for (int i = 0; i < tamanho; i++)
     {
-        fluxoBrutoDeBitsPontoB[i] = fluxoBrutoDeBitsPontoA[i]; // Copiar os elementos de fluxoBrutoDeBitsPontoA para fluxoBrutoDeBitsPontoB
+        fluxoBrutoDeBitsPontoB.push_back(fluxoBrutoDeBitsPontoA[i]); // Copia os elementos de fluxoBrutoDeBitsPontoA para fluxoBrutoDeBitsPontoB
     }
 
     CamadaFisicaReceptora(fluxoBrutoDeBitsPontoB);
 
-    delete[] fluxoBrutoDeBitsPontoB; // Liberar a memória alocada para o array fluxoBrutoDeBitsPontoB
 } // fim do metodo MeioDeComunicacao
 
-void CamadaFisicaReceptora(int quadro[])
+void CamadaFisicaReceptora(vector<int> quadro)
 {
-    int tipoDeDecodificacao = 0; // Alterar de acordo com o teste
-    int *fluxoBrutoDeBits;       // TRABALHAR COM BITS
+    int tipoDeDecodificacao = 0;  // Alterar de acordo com o teste
+    vector<int> fluxoBrutoDeBits; // TRABALHAR COM BITS
 
     switch (tipoDeDecodificacao)
     {
@@ -105,43 +174,46 @@ void CamadaFisicaReceptora(int quadro[])
         break;
     }
 
-    MeioDeComunicacao(fluxoBrutoDeBits);
+    CamadaDeAplicacaoReceptora(fluxoBrutoDeBits);
 } // CamadaFisicaReceptora
 
-int *CamadaFisicaReceptoraCodificacaoBinaria(int quadro[])
+vector<int> CamadaFisicaReceptoraCodificacaoBinaria(vector<int> quadro)
 {
-    cout << "Implementar Decodificação Binária" << endl;
-    // Implemente a decodificação binária e retorne o fluxo bruto de bits como um ponteiro
-    int *fluxoBrutoDeBits = nullptr; // Exemplo: inicialize o ponteiro como nulo
-    // Faça as operações necessárias para decodificar o quadro e atribuir o resultado a 'fluxoBrutoDeBits'
+    vector<int> fluxoBrutoDeBits = quadro;
+
+    cout << "Camada Fisica Receptora - Mensagem em codificacao Binaria: " << endl;
+
+    for (int i = 0; i < fluxoBrutoDeBits.size(); i++)
+    {
+        cout << fluxoBrutoDeBits[i];
+    }
+    cout << endl
+         << endl;
+
     return fluxoBrutoDeBits;
 }
 
-int *CamadaFisicaReceptoraCodificacaoManchester(int quadro[])
+vector<int> CamadaFisicaReceptoraCodificacaoManchester(vector<int> quadro)
 {
     cout << "Implementar Decodificação Manchester" << endl;
     // Implemente a decodificação Manchester e retorne o fluxo bruto de bits como um ponteiro
-    int *fluxoBrutoDeBits = nullptr; // Exemplo: inicialize o ponteiro como nulo
+    vector<int> fluxoBrutoDeBits; // Exemplo: inicialize o ponteiro como nulo
     // Faça as operações necessárias para decodificar o quadro e atribuir o resultado a 'fluxoBrutoDeBits'
     return fluxoBrutoDeBits;
 }
 
-int *CamadaFisicaReceptoraCodificacaoBipolar(int quadro[])
+vector<int> CamadaFisicaReceptoraCodificacaoBipolar(vector<int> quadro)
 {
     cout << "Implementar Decodificação Bipolar" << endl;
     // Implemente a decodificação bipolar e retorne o fluxo bruto de bits como um ponteiro
-    int *fluxoBrutoDeBits = nullptr; // Exemplo: inicialize o ponteiro como nulo
+    vector<int> fluxoBrutoDeBits; // Exemplo: inicialize o ponteiro como nulo
     // Faça as operações necessárias para decodificar o quadro e atribuir o resultado a 'fluxoBrutoDeBits'
     return fluxoBrutoDeBits;
 }
 
-void CamadaDeAplicacaoReceptora(int quadro[])
+void CamadaDeAplicacaoReceptora(vector<int> quadro)
 {
-    string mensagem;
-    for (int i = 0; i < sizeof(quadro); i++)
-    {
-        mensagem += static_cast<char>(quadro[i]);
-    }
+    string mensagem = ConversorParaString(quadro);
 
     // Chama a próxima camada
     AplicacaoReceptora(mensagem);
