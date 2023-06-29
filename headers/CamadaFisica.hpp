@@ -8,6 +8,7 @@
 #include <vector>
 #include <bits/stdc++.h>
 #include <bitset>
+#include <windows.h>
 
 using namespace std;
 
