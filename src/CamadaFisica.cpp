@@ -5,6 +5,7 @@ using namespace std;
 
 int opcao = 0;
 
+// Função que imprime array de bits
 void ImprimeBits(vector<int> bits)
 {
     for (int i = 0; i < bits.size(); i++)
@@ -16,16 +17,18 @@ void ImprimeBits(vector<int> bits)
          << endl;
 }
 
+// Função que converte string para bits*/
 vector<int> ConversorParaBits(string mensagem)
 {
     vector<int> quadro;
 
+    // Loop para cada caractere da mensagem
     for (char c : mensagem)
     {
         // Conversão direta de cada caractere para o valor binário correspondente
         bitset<8> bits(c);
 
-        // Inserir os bits no quadro
+        // Inserir os bits no quadro 
         for (int i = 7; i >= 0; i--)
         {
             quadro.push_back(bits[i]);
@@ -40,15 +43,18 @@ string ConversorParaString(vector<int> quadro)
     string mensagem;
     int valor = 0;
 
+    // Loop sobre o vetor de bits
     for (size_t i = 0; i < quadro.size(); i += 8)
     {
         valor = 0;
 
+        // Converter os 8 bits em um valor inteiro
         for (size_t j = 0; j < 8; j++)
         {
             valor = (valor << 1) + quadro[i + j];
         }
 
+        // Converter o valor inteiro de volta para um caractere e adicioná-lo à mensagem
         mensagem.push_back(static_cast<char>(valor));
     }
 
@@ -57,11 +63,14 @@ string ConversorParaString(vector<int> quadro)
 
 void CamadaDeAplicacaoTransmissora(string mensagem)
 {
+    // Converte a mensagem em uma sequência de bits
     vector<int> quadro = ConversorParaBits(mensagem);
 
+    // Imprime a mensagem convertida para bits
     cout << "Camada De Aplicacao Transmissora | Mensagem convertida para bits:" << endl;
-
     ImprimeBits(quadro);
+
+    // Chama a função da Camada Física Transmissora
     CamadaFisicaTransmissora(quadro);
 }
 
@@ -119,13 +128,13 @@ vector<int> CamadaFisicaTransmissoraCodificacaoManchester(vector<int> quadro)
     {
         if (quadro[i] == 0)
         {
-            // Bit 0: transição de alto para baixo no meio do intervalo
+            // Se bit igual a 0 transição de alto para baixo no meio do intervalo
             fluxoBrutoDeBits.push_back(1);
             fluxoBrutoDeBits.push_back(0);
         }
         else if (quadro[i] == 1)
         {
-            // Bit 1: transição de baixo para alto no meio do intervalo
+            // Se bit igual a 1transição de baixo para alto no meio do intervalo
             fluxoBrutoDeBits.push_back(0);
             fluxoBrutoDeBits.push_back(1);
         }
