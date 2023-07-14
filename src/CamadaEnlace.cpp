@@ -4,6 +4,65 @@
 
 using namespace std;
 
+void CamadaEnlaceDadosTransmissora(vector<int> quadro){
+
+  CamadaEnlaceDadosTransmissoraEnquadramento(quadro);
+
+  CamadaEnlaceDadosTransmissoraControleDeErro(quadro);
+
+  CamadaFisicaTransmissora(quadro);
+} // Fim da CamadaEnlaceDadosTransmissora
+
+vector<int> CamadaEnlaceDadosTransmissoraEnquadramento(vector<int> quadro) {
+    
+    // escolhe o tipo de enquadramento
+	// 0 = Contagem de Caracters
+	// 1 = inserção de bytes
+	int enquadramento = 1;
+	vector<int> quadro_enquadrado;
+	// enquadra o fluxo de bits passado
+	switch (enquadramento){
+		case 0:
+
+			quadro_enquadrado = CamadaEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres(quadro);
+
+			break;
+
+		case 1:
+
+			quadro_enquadrado = CamadaEnlaceDadosTransmissoraEnquadramentoInsercaoDeBytes(quadro);
+
+			break;
+	}
+
+	attron(COLOR_PAIR(2));
+	printw("Quadro Enquadrado: \n\n");
+	attroff(COLOR_PAIR(2));
+	for (int i : quadro)
+		printw("%d", i);
+	printw("\n\n");
+	
+	return quadro_enquadrado;
+    
+  int tipoDeEnquadramento = 0; // Alterar de acordo o teste
+  vector<int> quadroEnquadrado;
+
+  switch (tipoDeEnquadramento){
+
+    case 0: // Contagem de caracteres
+      quadroEnquadrado = CamadaDeEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres(quadro);
+      break;
+    
+    case 1: // Inserção de bytes
+      quadroEnquadrado = CamadaDeEnlaceDadosTransmissoraEnquadramentoInsercaoDeBytes(quadro);
+      break;
+
+    default:
+      cout << "ERROR" << endl;
+      break;
+  }
+} // Fim da CamadaEnlaceDadosTransmissoraEnquadramento
+
 //-----------------------------Transmissão de Dados----------------------------------------
 vector<int> CamadaDeEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres(vector<int> quadro){
   //cod aqui
@@ -28,36 +87,9 @@ vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCodigoDeHamming(vector<in
 } // Fim da CamadaEnlaceDadosTransmissoraControleDeErroCodigoDeHamming
 
 
-void CamadaEnlaceDadosTransmissora(vector<int> quadro){
 
-  CamadaEnlaceDadosTransmissoraEnquadramento(quadro);
 
-  CamadaEnlaceDadosTransmissoraControleDeErro(quadro);
-
-  CamadaFisicaTransmissora(quadro);
-} // Fim da CamadaEnlaceDadosTransmissora
-
-void CamadaEnlaceDadosTransmissoraEnquadramento(vector<int> quadro) {
-  int tipoDeEnquadramento = 0; // Alterar de acordo o teste
-  vector<int> quadroEnquadrado;
-
-  switch (tipoDeEnquadramento){
-
-    case 0: // Contagem de caracteres
-      quadroEnquadrado = CamadaDeEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres(quadro);
-      break;
-    
-    case 1: // Inserção de bytes
-      quadroEnquadrado = CamadaDeEnlaceDadosTransmissoraEnquadramentoInsercaoDeBytes(quadro);
-      break;
-
-    default:
-      cout << "ERROR" << endl;
-      break;
-  }
-} // Fim da CamadaEnlaceDadosTransmissoraEnquadramento
-
-void CamadaEnlaceDadosTransmissoraControleDeErro(vector<int> quadro){
+vector<int> CamadaEnlaceDadosTransmissoraControleDeErro(vector<int> quadro){
 
   int tipoDeControleDeErro = 0; // Alterar de acordo o teste
   vector<int> quadroControle;

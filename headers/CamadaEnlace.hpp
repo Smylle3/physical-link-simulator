@@ -3,11 +3,11 @@
 #include "../headers/CamadaFisica.hpp"
 
 // Cabeçalho das funções da camada de enlace
-  //Transmissão
+//Transmissão
 
 void CamadaEnlaceDadosTransmissora(vector<int> quadro);
-void CamadaEnlaceDadosTransmissoraEnquadramento(vector<int> quadro);
-void CamadaEnlaceDadosTransmissoraControleDeErro(vector<int> quadro);
+vector<int> CamadaEnlaceDadosTransmissoraEnquadramento(vector<int> quadro);
+vector<int> CamadaEnlaceDadosTransmissoraControleDeErro(vector<int> quadro);
 
 vector<int> CamadaDeEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres(vector<int> quadro);
 vector<int> CamadaDeEnlaceDadosTransmissoraEnquadramentoInsercaoDeBytes(vector<int> quadro);
@@ -16,7 +16,7 @@ vector<int> CamadaEnlaceDadosTransmissoraControleDeErroBitParidadePar(vector<int
 vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCRC(vector<int> quadro);
 vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCodigoDeHamming(vector<int> quadro);
 
-  //Recepção
+//Recepção
 
 void CamadaEnlaceDadosReceptora(vector<int> quadro);
 void CamadaEnlaceDadosReceptoraEnquadramento(vector<int> quadro);
