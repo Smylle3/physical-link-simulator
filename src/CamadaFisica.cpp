@@ -69,9 +69,11 @@ void CamadaDeAplicacaoTransmissora(string mensagem)
     // Imprime a mensagem convertida para bits
     cout << "Camada De Aplicacao Transmissora | Mensagem convertida para bits:" << endl;
     ImprimeBits(quadro);
+    // Chama a função da Camada de Enlace Transmissora
+    CamadaEnlaceDadosTransmissora(quadro);
 
     // Chama a função da Camada Física Transmissora
-    CamadaFisicaTransmissora(quadro);
+    //CamadaFisicaTransmissora(quadro);
 }
 
 void CamadaFisicaTransmissora(vector<int> quadro)
