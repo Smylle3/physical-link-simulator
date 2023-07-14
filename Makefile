@@ -30,6 +30,10 @@ $(OBJ_DIR)/Simulador.o: $(SRC_DIR)/Simulador.cpp
 $(OBJ_DIR)/CamadaFisica.o: $(SRC_DIR)/CamadaFisica.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -I $(HEADER_DIR)
 
+# Compilar arquivo CamadaFisica.cpp em arquivo objeto CamadaEnlace.o
+$(OBJ_DIR)/CamadaFisica.o: $(SRC_DIR)/CamadaEnlace.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@ -I $(HEADER_DIR)
+
 # Compilar demais arquivos .cpp em arquivos objeto .o
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -I $(HEADER_DIR)
@@ -41,5 +45,6 @@ $(EXECUTABLE): $(OBJECTS)
 clean:
 	del $(OBJ_DIR)\simulador.exe
 	del $(OBJ_DIR)\CamadaFisica.o
+	del $(OBJ_DIR)\CamadaEnlace.o
 	del $(OBJ_DIR)\Simulador.o
 	@echo Arquivos limpos!

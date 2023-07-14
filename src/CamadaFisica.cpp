@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../headers/CamadaFisica.hpp"
+#include "../headers/CamadaEnlace.hpp"
 
 using namespace std;
 
@@ -167,8 +167,10 @@ vector<int> CamadaFisicaTransmissoraCodificacaoBipolar(vector<int> quadro)
 
 void MeioDeComunicacao(vector<int> fluxoBrutoDeBits) // Metodo que simula a transmissão de informações de um pontoA para um pontoB
 {
+    int erro, porcentagemDeErros;
     vector<int> fluxoBrutoDeBitsPontoA, fluxoBrutoDeBitsPontoB;
 
+    porcentagemDeErros = 0; // 10%, 20%, 30%, 40%, ..., 100%
     fluxoBrutoDeBitsPontoA = fluxoBrutoDeBits;
 
     int tamanho = fluxoBrutoDeBitsPontoA.size();
@@ -179,7 +181,14 @@ void MeioDeComunicacao(vector<int> fluxoBrutoDeBits) // Metodo que simula a tran
 
     for (int i = 0; i < tamanho; i++)
     {
-        fluxoBrutoDeBitsPontoB.push_back(fluxoBrutoDeBitsPontoA[i]); // Copia os elementos de fluxoBrutoDeBitsPontoA para fluxoBrutoDeBitsPontoB
+        if((rand() % 100) == 30){ // Fazer probabilidade ?
+            fluxoBrutoDeBitsPontoB.push_back(fluxoBrutoDeBitsPontoA[i]); // Copia os elementos de fluxoBrutoDeBitsPontoA para fluxoBrutoDeBitsPontoB
+        }
+        else{
+            fluxoBrutoDeBitsPontoB[i] = 0;
+            fluxoBrutoDeBitsPontoA.push_back(fluxoBrutoDeBitsPontoB[i]);
+            // fluxoBrutoDeBitsPontoA = fluxoBrutoDeBitsPontoB --
+        }
     }
 
     CamadaFisicaReceptora(fluxoBrutoDeBitsPontoB);
@@ -212,7 +221,9 @@ void CamadaFisicaReceptora(vector<int> quadro)
     }
 
     ImprimeBits(fluxoBrutoDeBits);
-    CamadaDeAplicacaoReceptora(fluxoBrutoDeBits);
+    CamadaEnlaceDadosReceptora(fluxoBrutoDeBits);
+    //CamadaDeAplicacaoReceptora(fluxoBrutoDeBits);
+    
 } // CamadaFisicaReceptora
 
 vector<int> CamadaFisicaReceptoraCodificacaoBinaria(vector<int> quadro)
