@@ -29,7 +29,7 @@ void CamadaEnlaceDadosTransmissora(vector<int> quadro)
 	quadro_enquadrado = CamadaEnlaceDadosTransmissoraEnquadramento(quadro);
 	quadro_enquadrado = CamadaEnlaceDadosTransmissoraControleDeErro(quadro_enquadrado);
 
-	CamadaFisicaTransmissora(quadro);
+	CamadaFisicaTransmissora(quadro_enquadrado);
 } // Fim da CamadaEnlaceDadosTransmissora
 
 vector<int> CamadaEnlaceDadosTransmissoraEnquadramento(vector<int> quadro)
@@ -252,6 +252,7 @@ vector<int> CamadaEnlaceDadosTransmissoraControleDeErro(vector<int> quadro)
 
 vector<int> CamadaDeEnlaceDadosReceptoraEnquadramentoContagemDeCaracteres(vector<int> quadro)
 {
+	cout << "Camada Enlace de dados receptora CONTAGEM DE CARACTERES:" << endl;
 	vector<int> quadro_desenquadrado;
 	for (int i = 8; i < quadro.size(); i++)
 		quadro_desenquadrado.push_back(quadro[i]);
@@ -296,6 +297,8 @@ vector<int> CamadaDeEnlaceDadosReceptoraEnquadramentoInsercaoDeBytes(vector<int>
 
 vector<int> CamadaEnlaceDadosReceptoraControleDeErroBitParidadePar(vector<int> quadro)
 {
+	cout << "Camada Enlace de dados receptora PARIDADE PAR" << endl;
+
 	vector<int> recebimento_paridade_par;
 	bool paridade = true;
 
@@ -374,17 +377,21 @@ vector<int> CamadaEnlaceDadosReceptoraControleDeErroCodigoDeHamming(vector<int> 
 
 void CamadaEnlaceDadosReceptora(vector<int> quadro)
 {
+	cout << "Camada Enlace de dados receptora:" << endl;
 	vector<int> quadro_desenquadrado;
+	ImprimeBits(quadro);
 
 	quadro_desenquadrado = CamadaEnlaceDadosReceptoraEnquadramento(quadro);
 	quadro_desenquadrado = CamadaEnlaceDadosReceptoraControleDeErro(quadro_desenquadrado);
 
-	ImprimeBits(quadro);
-	CamadaDeAplicacaoReceptora(quadro);
+	ImprimeBits(quadro_desenquadrado);
+	CamadaDeAplicacaoReceptora(quadro_desenquadrado);
 } // Fim da CamadaEnlaceDadosReceptora
 
 vector<int> CamadaEnlaceDadosReceptoraEnquadramento(vector<int> quadro)
 {
+	cout << "Camada Enlace de dados receptora ENQUADRAMENTO:" << endl;
+
 	int tipoDeEnquadramento = 0; // Alterar de acordo o teste
 	vector<int> quadroDesenquadrado;
 
@@ -398,13 +405,16 @@ vector<int> CamadaEnlaceDadosReceptoraEnquadramento(vector<int> quadro)
 		break;
 	default:
 		cout << "ERROR" << endl;
+		exit(1);
 		break;
 	}
+
+	return quadroDesenquadrado;
 } // Fim da CamadaEnlaceDadosReceptoraEnquadramento
 
 vector<int> CamadaEnlaceDadosReceptoraControleDeErro(vector<int> quadro)
 {
-
+	cout << "Camada Enlace de dados receptora CONTROLE DE ERRO" << endl;
 	int tipoDeControleDeErro = 0; // Alterar de acordo o teste
 	vector<int> quadroControle;
 
@@ -424,4 +434,5 @@ vector<int> CamadaEnlaceDadosReceptoraControleDeErro(vector<int> quadro)
 		break;
 	}
 
+	return quadroControle;
 } // Fim da CamadaEnlaceDadosReceptoraControleDeErro
