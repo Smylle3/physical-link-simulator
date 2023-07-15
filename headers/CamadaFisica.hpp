@@ -11,6 +11,8 @@
 #include <bitset>
 #include <windows.h>
 
+#define BYTE 8
+
 using namespace std;
 
 /*Cabeçalhos das funções utilizadas no projeto*/
@@ -30,5 +32,9 @@ vector<int> CamadaFisicaReceptoraCodificacaoBipolar(vector<int> quadro);
 
 vector<int> ConversorParaBits(string mensagem);
 string ConversorParaString(vector<int> quadro);
+void ImprimeBits(vector<int> bits);
+
+bool potenciaDeDois(int number);
+int calculaParidadeBit(const vector<int> &quadro, int posicao_paridade);
 
 #endif // CAMADAFISICA_HPP

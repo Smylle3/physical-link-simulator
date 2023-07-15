@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "../headers/CamadaEnlace.hpp"
+#include "../headers/CamadaFisica.hpp"
 
 using namespace std;
 
@@ -15,9 +15,8 @@ int main()
 void AplicacaoTransmissora()
 {
     string mensagem;
-    cout << "Digite uma Mensagem: " << endl;
-    cin >> mensagem;
-    cout << endl;
+    cout << "Digite uma mensagem: ";
+    getline(cin, mensagem);
 
     CamadaDeAplicacaoTransmissora(mensagem);
 }

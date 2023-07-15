@@ -19,8 +19,8 @@ vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCodigoDeHamming(vector<in
 //Recepção
 
 void CamadaEnlaceDadosReceptora(vector<int> quadro);
-void CamadaEnlaceDadosReceptoraEnquadramento(vector<int> quadro);
-void CamadaEnlaceDadosReceptoraControleDeErro(vector<int> quadro);
+vector<int> CamadaEnlaceDadosReceptoraEnquadramento(vector<int> quadro);
+vector<int> CamadaEnlaceDadosReceptoraControleDeErro(vector<int> quadro);
 
 vector<int> CamadaDeEnlaceDadosReceptoraEnquadramentoContagemDeCaracteres(vector<int> quadro);
 vector<int> CamadaDeEnlaceDadosReceptoraEnquadramentoInsercaoDeBytes(vector<int> quadro);
