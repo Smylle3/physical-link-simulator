@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../headers/CamadaEnlace.hpp"
+#include "../headers/CamadaFisica.hpp"
 
 using namespace std;
 
