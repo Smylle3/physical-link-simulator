@@ -4,6 +4,9 @@
 
 using namespace std;
 
+int tipoDeEnquadramento = 0;  // Alterar de acordo com o teste
+int tipoDeControleDeErro = 0; // Alterar de acordo com o teste
+
 bool potenciaDeDois(int number)
 {
 	return (number & (number - 1)) == 0;
@@ -34,7 +37,18 @@ void CamadaEnlaceDadosTransmissora(vector<int> quadro)
 
 vector<int> CamadaEnlaceDadosTransmissoraEnquadramento(vector<int> quadro)
 {
-	int tipoDeEnquadramento = 0; // Alterar de acordo com o teste
+	cout << "Camada De Enlace de dados Transmissora | Enquadramento" << endl;
+
+	cout << "==============================" << endl;
+	cout << "  Selecione uma opcao de enquadramento:" << endl;
+	cout << "==============================" << endl;
+	cout << "  0 - Enquadramento por contagem de caracteres" << endl;
+	cout << "  1 - Enquadramento por insercao de bytes" << endl;
+	cout << "==============================" << endl;
+	cout << "  Opcao: ";
+	cin >> tipoDeEnquadramento; // Alterar de acordo com o teste
+	cout << endl;
+
 	vector<int> quadroEnquadrado;
 
 	switch (tipoDeEnquadramento)
@@ -50,15 +64,13 @@ vector<int> CamadaEnlaceDadosTransmissoraEnquadramento(vector<int> quadro)
 		break;
 	}
 
-	cout << "Quadro Enquadrado: " << endl;
-	ImprimeBits(quadroEnquadrado);
 	return quadroEnquadrado;
 }
 
 //-----------------------------Transmissão de Dados----------------------------------------
 vector<int> CamadaDeEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres(vector<int> quadro)
 {
-	cout << "Enquadramento com contagem de caracteres\n\n";
+	cout << "Enquadramento | Contagem de caracteres" << endl;
 
 	uint8_t qtd_bytes = ceil(quadro.size() / 8);
 	vector<int> quadro_enquadrado_caracteres = quadro;
@@ -73,14 +85,14 @@ vector<int> CamadaDeEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres(vec
 			quadro_enquadrado_caracteres.insert(quadro_enquadrado_caracteres.begin(), int(0));
 	}
 
-	cout << "Quadro enquadrado com contagem de caracteres:\n";
+	cout << "Quadro enquadrado com contagem de caracteres: ";
 	ImprimeBits(quadro_enquadrado_caracteres);
 	return quadro_enquadrado_caracteres;
 } // Fim da CamadaDeEnlaceDadosTransmissoraEnquadramentoContagemDeCaracteres
 
 vector<int> CamadaDeEnlaceDadosTransmissoraEnquadramentoInsercaoDeBytes(vector<int> quadro)
 {
-	cout << "Enquadramento com insercao de bytes\n\n";
+	cout << "Enquadramento | Insercao de bytes" << endl;
 
 	string flag = "00001111";
 	string esc = "11110000";
@@ -111,14 +123,14 @@ vector<int> CamadaDeEnlaceDadosTransmissoraEnquadramentoInsercaoDeBytes(vector<i
 	for (auto &i : quadro_str)
 		novo_quadro.push_back(i - '0');
 
-	cout << "Quadro enquadrado com insercao de bytes:\n";
+	cout << "Quadro enquadrado com insercao de bytes: ";
 	ImprimeBits(novo_quadro);
 	return novo_quadro;
 } // fim da CamadaDeEnlaceDadosTransmissoraEnquadramentoInsercaoDeBytes
 
 vector<int> CamadaEnlaceDadosTransmissoraControleDeErroBitParidadePar(vector<int> quadro)
 {
-	cout << "\n\nControle de Paridade Par..." << endl;
+	cout << "Camada De Enlace de dados Transmissora | Controle de erro | Paridade Par" << endl;
 
 	vector<int> controle_paridade_par;
 	bool paridade = true;
@@ -132,20 +144,21 @@ vector<int> CamadaEnlaceDadosTransmissoraControleDeErroBitParidadePar(vector<int
 
 	controle_paridade_par.push_back(paridade);
 
+	cout << "Controle por Paridade Par aplicado: ";
 	ImprimeBits(controle_paridade_par);
 	return controle_paridade_par;
 } // Fim da CamadaEnlaceDadosTransmissoraControleDeErroBitParidadePar
 
 vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCRC(vector<int> quadro)
 {
-	cout << "\n\nTransmissao com controle de erro CRC..." << endl;
+	cout << "Camada De Enlace de dados Transmissora | Controle de erro | CRC" << endl;
 
 	vector<int> novo_quadro = quadro;
 	string polinomio_crc_32 = "100110000010001110110110111";
 
 	if (quadro.size() <= polinomio_crc_32.length())
 	{
-		cout << "\n\nErro, o quadro possui menos bits que o polinomio" << endl
+		cout << "Erro, o quadro possui menos bits que o polinomio" << endl
 			 << endl;
 		exit(1);
 	}
@@ -166,14 +179,14 @@ vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCRC(vector<int> quadro)
 	for (int i = 0; i < quadro.size(); i++)
 		novo_quadro[i] = quadro[i];
 
+	cout << "Controle CRC aplicado: ";
 	ImprimeBits(novo_quadro);
 	return novo_quadro;
 } // Fim da CamadaEnlaceDadosTransmissoraControleDeErroCRC
 
 vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCodigoDeHamming(vector<int> quadro)
 {
-	cout << "\n\nControle de Erro com Código de Hamming..." << endl
-		 << endl;
+	cout << "Camada De Enlace de dados Transmissora | Controle de erro | Codigo de Hamming" << endl;
 
 	int n = quadro.size(); // Tamanho do quadro
 	int m = 0;			   // Número de bits de paridade adicionados
@@ -216,7 +229,7 @@ vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCodigoDeHamming(vector<in
 		quadro_codificado[pow(2, i) - 1] = bit_paridade;
 	}
 	// Exibir o quadro codificado com os bits de paridade
-	cout << "Quadro codificado com Código de Hamming:" << endl;
+	cout << "Quadro codificado por Codigo de Hamming: ";
 	ImprimeBits(quadro_codificado);
 	return quadro_codificado;
 
@@ -224,8 +237,18 @@ vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCodigoDeHamming(vector<in
 
 vector<int> CamadaEnlaceDadosTransmissoraControleDeErro(vector<int> quadro)
 {
+	cout << "Camada De Enlace de dados Transmissora | Controle de erro" << endl;
+	cout << "==============================" << endl;
+	cout << "  Selecione uma opcao para o controle de erro:" << endl;
+	cout << "==============================" << endl;
+	cout << "  0 - Controle de erro por bit paridade par" << endl;
+	cout << "  1 - Controle de erro CRC" << endl;
+	cout << "  2 - Controle de erro por codigo de Hamming" << endl;
+	cout << "==============================" << endl;
+	cout << "  Opcao: ";
+	cin >> tipoDeControleDeErro; // Alterar de acordo com o teste
+	cout << endl;
 
-	int tipoDeControleDeErro = 0; // Alterar de acordo o teste
 	vector<int> quadroControle;
 
 	switch (tipoDeControleDeErro)
@@ -243,8 +266,6 @@ vector<int> CamadaEnlaceDadosTransmissoraControleDeErro(vector<int> quadro)
 		cout << "ERROR" << endl;
 		break;
 	}
-	cout << "Quadro após controle de erro realizado:" << endl;
-	ImprimeBits(quadroControle);
 	return quadroControle;
 } // Fim da CamadaEnlaceDadosTransmissoraControleDeErro
 
@@ -252,16 +273,19 @@ vector<int> CamadaEnlaceDadosTransmissoraControleDeErro(vector<int> quadro)
 
 vector<int> CamadaDeEnlaceDadosReceptoraEnquadramentoContagemDeCaracteres(vector<int> quadro)
 {
-	cout << "Camada Enlace de dados receptora CONTAGEM DE CARACTERES:" << endl;
+	cout << "Camada De Enlace de dados Receptora | Enquadramento | Contagem de caracteres" << endl;
 	vector<int> quadro_desenquadrado;
 	for (int i = 8; i < quadro.size(); i++)
 		quadro_desenquadrado.push_back(quadro[i]);
 
+	cout << "Enquadramento por Contagem de caracteres: ";
+	ImprimeBits(quadro_desenquadrado);
 	return quadro_desenquadrado;
 } // Fim da CamadaDeEnlaceDadosReceptoraEnquadramentoContagemDeCaracteres
 
 vector<int> CamadaDeEnlaceDadosReceptoraEnquadramentoInsercaoDeBytes(vector<int> quadro)
 {
+	cout << "Camada De Enlace de dados Receptora | Enquadramento | Insercao de Bytes:" << endl;
 	string byte_str = "";
 	string quadro_str = "";
 	string flag = "00001111";
@@ -291,13 +315,14 @@ vector<int> CamadaDeEnlaceDadosReceptoraEnquadramentoInsercaoDeBytes(vector<int>
 	for (auto &i : quadro_str)
 		novo_quadro.push_back(i - '0');
 
+	cout << "Enquadramento por Insercao de bytes: ";
 	ImprimeBits(novo_quadro);
 	return novo_quadro;
 } // Fim da CamadaDeEnlaceDadosReceptoraEnquadramentoInsercaoDeBytes
 
 vector<int> CamadaEnlaceDadosReceptoraControleDeErroBitParidadePar(vector<int> quadro)
 {
-	cout << "Camada Enlace de dados receptora PARIDADE PAR" << endl;
+	cout << "Camada De Enlace de dados Receptora | Controle de erro | Paridade Par" << endl;
 
 	vector<int> recebimento_paridade_par;
 	bool paridade = true;
@@ -312,12 +337,15 @@ vector<int> CamadaEnlaceDadosReceptoraControleDeErroBitParidadePar(vector<int> q
 	if (quadro.back() == paridade)
 		cout << "Recebeu com sucesso " << endl;
 
+	cout << "Controle por Paridade Par aplicado: ";
 	ImprimeBits(recebimento_paridade_par);
 	return recebimento_paridade_par;
 } // Fim da CamadaEnlaceDadosReceptoraControleDeErroBitParidadePar
 
 vector<int> CamadaEnlaceDadosReceptoraControleDeErroCRC(vector<int> quadro)
 {
+	cout << "Camada De Enlace de dados Receptora | Controle de erro | CRC" << endl;
+
 	string polinomio_crc_32 = "100110000010001110110110111";
 	vector<int> mensagem, novo_quadro;
 	bool valido = true;
@@ -351,6 +379,7 @@ vector<int> CamadaEnlaceDadosReceptoraControleDeErroCRC(vector<int> quadro)
 
 	if (valido)
 	{
+		cout << "Controle por CRC aplicado: ";
 		ImprimeBits(mensagem);
 		return mensagem;
 	}
@@ -358,7 +387,7 @@ vector<int> CamadaEnlaceDadosReceptoraControleDeErroCRC(vector<int> quadro)
 
 vector<int> CamadaEnlaceDadosReceptoraControleDeErroCodigoDeHamming(vector<int> quadro)
 {
-	cout << "Decodificando do codigo de hamming..." << endl;
+	cout << "Camada De Enlace de dados Receptora | Controle de erro | Codigo de Hamming" << endl;
 
 	vector<int> decodificacao_hamming;
 	int posicao_paridade = 0;
@@ -371,28 +400,25 @@ vector<int> CamadaEnlaceDadosReceptoraControleDeErroCodigoDeHamming(vector<int> 
 			decodificacao_hamming.push_back(quadro.at(i - 1));
 	}
 
+	cout << "Controle por Codigo de Hamming aplicado: ";
 	ImprimeBits(decodificacao_hamming);
 	return decodificacao_hamming;
 } // Fim da CamadaEnlaceDadosReceptoraControleDeErroCodigoDeHamming
 
 void CamadaEnlaceDadosReceptora(vector<int> quadro)
 {
-	cout << "Camada Enlace de dados receptora:" << endl;
 	vector<int> quadro_desenquadrado;
-	ImprimeBits(quadro);
 
 	quadro_desenquadrado = CamadaEnlaceDadosReceptoraEnquadramento(quadro);
 	quadro_desenquadrado = CamadaEnlaceDadosReceptoraControleDeErro(quadro_desenquadrado);
 
-	ImprimeBits(quadro_desenquadrado);
 	CamadaDeAplicacaoReceptora(quadro_desenquadrado);
 } // Fim da CamadaEnlaceDadosReceptora
 
 vector<int> CamadaEnlaceDadosReceptoraEnquadramento(vector<int> quadro)
 {
-	cout << "Camada Enlace de dados receptora ENQUADRAMENTO:" << endl;
+	cout << "Camada De Enlace de dados Receptora | Enquadramento" << endl;
 
-	int tipoDeEnquadramento = 0; // Alterar de acordo o teste
 	vector<int> quadroDesenquadrado;
 
 	switch (tipoDeEnquadramento)
@@ -414,7 +440,7 @@ vector<int> CamadaEnlaceDadosReceptoraEnquadramento(vector<int> quadro)
 
 vector<int> CamadaEnlaceDadosReceptoraControleDeErro(vector<int> quadro)
 {
-	cout << "Camada Enlace de dados receptora CONTROLE DE ERRO" << endl;
+	cout << "Camada De Enlace de dados Receptora | Controle de erro" << endl;
 	int tipoDeControleDeErro = 0; // Alterar de acordo o teste
 	vector<int> quadroControle;
 

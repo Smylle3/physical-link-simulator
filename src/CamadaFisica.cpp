@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int opcao = 0;
+int tipoDeCodificacao = 0;
 
 // Função que imprime array de bits
 void ImprimeBits(vector<int> bits)
@@ -67,7 +67,7 @@ void CamadaDeAplicacaoTransmissora(string mensagem)
 	vector<int> quadro = ConversorParaBits(mensagem);
 
 	// Imprime a mensagem convertida para bits
-	cout << "Camada De Aplicacao Transmissora | Mensagem convertida para bits:" << endl;
+	cout << "Camada De Aplicacao Transmissora | Mensagem convertida para bits: ";
 	ImprimeBits(quadro);
 	// Chama a função da Camada de Enlace Transmissora
 	CamadaEnlaceDadosTransmissora(quadro);
@@ -86,10 +86,9 @@ void CamadaFisicaTransmissora(vector<int> quadro)
 	cout << "  2 - Codificacao Bipolar" << endl;
 	cout << "==============================" << endl;
 	cout << "  Opcao: ";
-	cin >> opcao;
+	cin >> tipoDeCodificacao;
 	cout << endl;
 
-	int tipoDeCodificacao = opcao; // Mudar de acordo com o teste
 	vector<int> fluxoBrutoDeBits;  // Trabalhar com BITS
 
 	switch (tipoDeCodificacao)
@@ -111,7 +110,7 @@ void CamadaFisicaTransmissora(vector<int> quadro)
 		break;
 	}
 
-	cout << "Camada Fisica Transmissora - Mensagem codificada:" << endl;
+	cout << "Camada Fisica Transmissora - Mensagem codificada: ";
 	ImprimeBits(fluxoBrutoDeBits);
 	MeioDeComunicacao(fluxoBrutoDeBits);
 } // fim do método CamadaFisicaTransmissora
@@ -178,7 +177,7 @@ void MeioDeComunicacao(vector<int> fluxoBrutoDeBits) // Metodo que simula a tran
 	int tamanho = fluxoBrutoDeBitsPontoA.size();
 
 	cout << "Enviando a mensagem, aguarde..." << endl;
-	Sleep(3 * 1000);
+	Sleep(2 * 1000);
 	cout << endl;
 
 	for (int i = 0; i < tamanho; i++)
@@ -202,21 +201,24 @@ void MeioDeComunicacao(vector<int> fluxoBrutoDeBits) // Metodo que simula a tran
 void CamadaFisicaReceptora(vector<int> quadro)
 {
 	cout << "Camada Fisica Receptora" << endl;
-	int tipoDeDecodificacao = opcao; // Alterar de acordo com o teste
+	cout << "Mensagem recebida com sucesso: ";
+	ImprimeBits(quadro);
+	
+	int tipoDeDecodificacao = tipoDeCodificacao; // Alterar de acordo com o teste
 	vector<int> fluxoBrutoDeBits;	 // TRABALHAR COM BITS
 
 	switch (tipoDeDecodificacao)
 	{
 	case 0: // Decodificação binária
-		cout << "Mensagem recebida com sucesso! Iniciando decodificacao BINARIA: " << endl;
+		cout << "Iniciando decodificacao BINARIA: ";
 		fluxoBrutoDeBits = CamadaFisicaReceptoraCodificacaoBinaria(quadro);
 		break;
 	case 1: // Decodificação Manchester
-		cout << "Mensagem recebida com sucesso! Iniciando a decodificacao usando MANCHESTER: " << endl;
+		cout << "Iniciando a decodificacao usando MANCHESTER: ";
 		fluxoBrutoDeBits = CamadaFisicaReceptoraCodificacaoManchester(quadro);
 		break;
 	case 2: // Decodificação bipolar
-		cout << "Mensagem recebida com sucesso! Iniciando decodificacao BIPOLAR: " << endl;
+		cout << "Iniciando decodificacao BIPOLAR: ";
 		fluxoBrutoDeBits = CamadaFisicaReceptoraCodificacaoBipolar(quadro);
 		break;
 	default:
