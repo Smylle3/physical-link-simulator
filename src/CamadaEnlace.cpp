@@ -158,8 +158,7 @@ vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCRC(vector<int> quadro)
 
 	if (quadro.size() <= polinomio_crc_32.length())
 	{
-		cout << "Erro, o quadro possui menos bits que o polinomio" << endl
-			 << endl;
+		cout << "Erro, o quadro possui menos bits que o polinomio" << endl;
 		exit(1);
 	}
 
@@ -188,52 +187,64 @@ vector<int> CamadaEnlaceDadosTransmissoraControleDeErroCodigoDeHamming(vector<in
 {
 	cout << "Camada De Enlace de dados Transmissora | Controle de erro | Codigo de Hamming" << endl;
 
-	int n = quadro.size(); // Tamanho do quadro
-	int m = 0;			   // Número de bits de paridade adicionados
-	int r = 0;			   // Número total de bits no quadro codificado
+	int tamanho_quadro = quadro.size();
+	int bit_redundancia = 0;
 
-	// Determinar o número de bits de paridade a serem adicionados
-	while (n + m + 1 > pow(2, m))
+	// Calcula a quantidade de bits de paridade necessários
+	while (tamanho_quadro + bit_redundancia + 1 > pow(2, bit_redundancia))
 	{
-		m++;
+		bit_redundancia++;
 	}
 
-	r = n + m; // Total de bits no quadro codificado
+	int tamanho_hamming = tamanho_quadro + bit_redundancia;
+	vector<int> codigo_hamming(tamanho_hamming);
 
-	// Criar o quadro codificado com os bits de paridade inicializados como 0
-	vector<int> quadro_codificado(r, 0);
+	int posicao_paridade = 0;
+	int posicao_dado = 0;
 
-	int j = 0; // Índice para percorrer o quadro codificado
-	int k = 0; // Índice para percorrer o quadro original
-	// Preencher os bits de dados no quadro codificado, pulando os bits de paridade
-	for (int i = 1; i <= r; i++)
+	// Preenche o quadro Hamming com os bits de paridade nas posições corretas
+	for (int i = 0; i < tamanho_hamming; i++)
 	{
-		if (potenciaDeDois(i))
+		if (i == pow(2, posicao_paridade) - 1)
 		{
-			// Pular bits de paridade
-			continue;
+			posicao_paridade++;
 		}
 		else
 		{
-			// Preencher os bits de dados
-			quadro_codificado[i - 1] = quadro[k];
-			k++;
+			codigo_hamming[i] = quadro[posicao_dado];
+			posicao_dado++;
 		}
 	}
-	// Calcular os bits de paridade usando a codificação de Hamming
-	for (int i = 0; i < m; i++)
+
+	// Calcula os bits de paridade
+	for (int i = 0; i < bit_redundancia; i++)
 	{
-		int bit_paridade = calculaParidadeBit(quadro_codificado, i);
+		int posicao_analise = pow(2, i) - 1;
+		int xor_analise = 0;
 
-		// Definir o bit de paridade no quadro codificado
-		quadro_codificado[pow(2, i) - 1] = bit_paridade;
+		while (posicao_analise < tamanho_hamming)
+		{
+			for (int j = 0; j < pow(2, i); j++)
+			{
+				xor_analise ^= codigo_hamming[posicao_analise];
+				posicao_analise++;
+			}
+			posicao_analise += pow(2, i);
+		}
+
+		codigo_hamming[pow(2, i) - 1] = xor_analise;
 	}
-	// Exibir o quadro codificado com os bits de paridade
-	cout << "Quadro codificado por Codigo de Hamming: ";
-	ImprimeBits(quadro_codificado);
-	return quadro_codificado;
 
-} // Fim da CamadaEnlaceDadosTransmissoraControleDeErroCodigoDeHamming
+	// Exibe o quadro codificado com os bits de paridade
+	cout << "Quadro codificado por Codigo de Hamming: ";
+	for (int bit : codigo_hamming)
+	{
+		cout << bit;
+	}
+	cout << endl;
+
+	return codigo_hamming;
+}
 
 vector<int> CamadaEnlaceDadosTransmissoraControleDeErro(vector<int> quadro)
 {
@@ -395,9 +406,13 @@ vector<int> CamadaEnlaceDadosReceptoraControleDeErroCodigoDeHamming(vector<int> 
 	for (int i = 1; i <= quadro.size(); i++)
 	{
 		if (i == pow(2, posicao_paridade))
+		{
 			posicao_paridade++;
+		}
 		else
+		{
 			decodificacao_hamming.push_back(quadro.at(i - 1));
+		}
 	}
 
 	cout << "Controle por Codigo de Hamming aplicado: ";
@@ -409,8 +424,8 @@ void CamadaEnlaceDadosReceptora(vector<int> quadro)
 {
 	vector<int> quadro_desenquadrado;
 
-	quadro_desenquadrado = CamadaEnlaceDadosReceptoraEnquadramento(quadro);
-	quadro_desenquadrado = CamadaEnlaceDadosReceptoraControleDeErro(quadro_desenquadrado);
+	quadro_desenquadrado = CamadaEnlaceDadosReceptoraControleDeErro(quadro);
+	quadro_desenquadrado = CamadaEnlaceDadosReceptoraEnquadramento(quadro_desenquadrado);
 
 	CamadaDeAplicacaoReceptora(quadro_desenquadrado);
 } // Fim da CamadaEnlaceDadosReceptora
@@ -459,5 +474,6 @@ vector<int> CamadaEnlaceDadosReceptoraControleDeErro(vector<int> quadro)
 		break;
 	}
 
+	ImprimeBits(quadroControle);
 	return quadroControle;
 } // Fim da CamadaEnlaceDadosReceptoraControleDeErro
