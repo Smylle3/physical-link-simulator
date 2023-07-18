@@ -441,7 +441,6 @@ vector<int> CamadaEnlaceDadosReceptoraEnquadramento(vector<int> quadro)
 vector<int> CamadaEnlaceDadosReceptoraControleDeErro(vector<int> quadro)
 {
 	cout << "Camada De Enlace de dados Receptora | Controle de erro" << endl;
-	int tipoDeControleDeErro = 0; // Alterar de acordo o teste
 	vector<int> quadroControle;
 
 	switch (tipoDeControleDeErro)
